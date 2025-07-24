@@ -5,7 +5,6 @@ import { StatusCodes } from 'http-status-codes';
 let baseURL: string = 'http://localhost:3000/users';
 
 test.describe('User management API', () => {
-
   test('GET /:id - should return a user by ID', async ({ request }) => {
     const responseCreate = await request.post(`${baseURL}`);
     const responseBody = await responseCreate.json();

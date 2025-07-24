@@ -89,7 +89,23 @@ test.describe('User management API with loop', () => {
     console.log('Second user:', secondUser);
   });
 
-  test('Delete all users and verify empty response', async ({ request }) => {});
+  test('Delete all users and verify empty response', async ({ request }) => {
+    await createUsers(5);
+    const response = await request.get(`${baseURL}`);
+    const responseBody = await response.json();
+    console.log(responseBody);
+    const numberOfObjects = responseBody.length;
+
+    for (let i = 0; i < numberOfObjects; i++) {
+      const userID = responseBody[i].id;
+      const deleteResponse = await request.delete(`${baseURL}/${userID}`);
+      expect(deleteResponse.ok()).toBeTruthy();
+    }
+    const finalResponse = await request.get(`${baseURL}`);
+    const finalResponseBody = await finalResponse.json();
+    console.log('Post-deletion users:', finalResponseBody);
+    expect(finalResponseBody.length).toBe(0);
+  });
 
   async function createUsers(numberOfUsers: number) {
     const requestContext = await request.newContext();
